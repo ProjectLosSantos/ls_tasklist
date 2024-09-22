@@ -3,7 +3,7 @@ author 'Project Los Santos'
 games { 'gta5' }
 lua54 'yes'
 
-client_script 'client/client.lua'
+client_script 'client/main.lua'
 
 shared_script {
     '@ox_lib/init.lua',
