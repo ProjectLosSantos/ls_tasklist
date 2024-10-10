@@ -12,6 +12,11 @@ const App = Vue.createApp({
             ]
         }
     },
+    computed: {
+        barWidth() {
+            return (this.currentAmountTask / this.maximumTask) * 100;
+        },
+    },
     methods: {
         formatStage(item) {
             return item.totalStage != null && item.totalStage != 0 ? `${item.currentStage}/${item.totalStage}` : '';

@@ -25,7 +25,13 @@
             </div>
     
             <div class="m-1 mx-5 my-3 text-center border-y-0 border-x-0 border-b-2 border-gray-400/80 relative flex flex-col justify-center items-center">
-                <div class="h-[4px] bg-sky-600 w-[40%] absolute z-10 boxShadow"></div>
+                <div class="h-[4px] bg-sky-600 w-[40%] absolute z-10 boxShadow"
+                :style="{
+                    width: barWidth === 100 ? '95%' : `${barWidth}%`,
+                    left: '50%', 
+                    transform: 'translateX(-50%)'
+                }">
+                </div>
             </div>
     
             <div class="text-center bg-gray-400/40 rounded mx-5 py-3 px-2 border border-gray-400/50 flex flex-col justify-center items-center text-white gap-2">
