@@ -29,20 +29,14 @@ end
 
 exports('updateStageAmount', updateStageAmount)
 
-local function setCompleteByIndex(index)
-    handleNuiMessage('setCompleteByIndex', { index = index })
+local function toggleCompleteByIndex(index)
+    handleNuiMessage('toggleCompleteByIndex', { index = index })
 end
 
-exports('setCompleteByIndex', setCompleteByIndex)
+exports('toggleCompleteByIndex', toggleCompleteByIndex)
 
-local function setTaskData(title, maximumTask, showNumberOfTask, taskList, currentAmountTask)
-    handleNuiMessage('setTaskData', {
-        title = title,
-        maximumTask = maximumTask,
-        showNumberOfTask = showNumberOfTask,
-        taskList = taskList,
-        currentAmountTask = currentAmountTask or 0
-    })
+local function setTaskData(data)
+    handleNuiMessage('setTaskData', data)
 end
 
 exports('setTaskData', setTaskData)
