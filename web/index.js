@@ -5,22 +5,31 @@ const App = Vue.createApp({
             title: 'Example',
             showNumberOfTask: false,
             maximumTask : 0,
-            currentAmountTask : 0,
+            currentTaskAmount : 0,
+            dynamicBar: false,
+            
             taskList: [
-                { index: 1, text: 'This is an example task', completed: false, currentStage: 0 ,totalStage: 2},
+                { index: 1, icon: 'fa-solid fa-car', text: 'This is an example task', completed: false, currentStage: 0 ,totalStage: 2},
                 { index: 1, text: 'This is an example task', completed: false},
             ]
         }
     },
+    computed: {
+        barWidth() {
+            const width = (this.currentTaskAmount / this.maximumTask) * 100;
+            return Math.max(5, Math.min(width, 95));
+        
+        }
+    },
     methods: {
         formatStage(item) {
-            return item.totalStage != null && item.totalStage != 0 ? `${item.currentStage}/${item.totalStage}` : '';
+            return item.totalStage != null && item.totalStage != 0 ? `${item.currentStage || 0}/${item.totalStage}` : '';
         },
         toggleTaskCompletion(index) {
             const task = this.taskList.find(task => task.index === index);
             
             if (task) {
-                task.completed = !task.completed;
+                task.completed = task.completed ? !task.completed : true;
             }
         },
         onMessage(event) {
@@ -30,19 +39,18 @@ const App = Vue.createApp({
                 if (!event.data.table.state) {
                     this.showNumberOfTask = false
                     this.maximumTask = 0
-                    this.currentAmountTask = 0
+                    this.currentTaskAmount = 0
                     this.taskList = []
                 }
             }
             else if (event.data.type == "toggleNumberOfTask") {
-                if (this.maximumTask == 0) return
-
+                if (!this.maximumTask) return
                 this.showNumberOfTask = event.data.table.state
             }
             else if (event.data.type == 'updateTaskAmount') {
-                if (event.data.table.taskAmount > this.maximumTask) return
+                if (event.data.table.taskAmount > this.maximumTask || !this.maximumTask) return
 
-                this.currentAmountTask = event.data.table.taskAmount
+                this.currentTaskAmount = event.data.table.taskAmount
             }
             else if (event.data.type == 'updateStageAmount') {
                 const task = this.taskList.find(task => task.index === event.data.table.index);
@@ -54,18 +62,18 @@ const App = Vue.createApp({
                     task.currentStage = event.data.table.currentStage
                 }
             }
-            else if (event.data.type == 'setCompleteByIndex') {
+            else if (event.data.type == 'toggleCompleteByIndex') {
                 this.toggleTaskCompletion(event.data.table.index)
             }
             else if (event.data.type == 'setTaskData') {
-                if (event.data.table.title == null || event.data.table.maximumTask == null || event.data.table.currentAmountTask == null || event.data.table.showNumberOfTask == null || event.data.table.taskList == null) return
-                if (event.data.table.currentAmountTask > event.data.table.maximumTask) return
+                if (event.data.table.currentTaskAmount > event.data.table.maximumTask) return
 
-                this.title = event.data.table.title
-                this.maximumTask = event.data.table.maximumTask
-                this.currentAmountTask = event.data.table.currentAmountTask
-                this.showNumberOfTask = event.data.table.showNumberOfTask
-                this.taskList = event.data.table.taskList
+                this.title = event.data.table.title || 'No title setted'
+                this.maximumTask = event.data.table.maximumTask || false
+                this.currentTaskAmount = this.maximumTask ? event.data.table.currentTaskAmount || 0 : false
+                this.showNumberOfTask = this.maximumTask ? event.data.table.showNumberOfTask || false : false
+                this.dynamicBar = this.maximumTask ? event.data.table.dynamicBar || false : false
+                this.taskList = event.data.table.tasks || []
             }
             else if (event.data.type == 'resetCompletes') {
                 this.taskList.forEach(task => {

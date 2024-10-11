@@ -1,47 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" />
+
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
         .textShadow {
             text-shadow: 0px 0px 15px rgb(2 132 199);
         }
+
         .boxShadow {
             box-shadow: 0 0px 10px 2px rgb(2 132 199)
         }
     </style>
 </head>
+
 <body class="h-screen w-screen select-none">
     <div id="app" class="h-full w-full flex justify-end items-center pl-5">
-        <div v-if="showed" class="w-[20%] m-5 px-3 py-5">
+        <div v-if="showed" class="w-[20%] m-5 px-3 py-5  md:w-[20%] lg:w-[15%]">
             <div class="text-center">
                 <p class="text-sky-600 px-2 py-1 z-20 text-lg font-semibold textShadow">
                     {{title}}
-                    <span v-if="showNumberOfTask">{{currentAmountTask}}/{{maximumTask}}</span>
+                    <span v-if="showNumberOfTask">{{currentTaskAmount}}/{{maximumTask}}</span>
                 </p>
             </div>
-    
-            <div class="m-1 mx-5 my-3 text-center border-y-0 border-x-0 border-b-2 border-gray-400/80 relative flex flex-col justify-center items-center">
-                <div class="h-[4px] bg-sky-600 w-[40%] absolute z-10 boxShadow"></div>
+
+            <div
+                class="m-1 mx-5 my-3 text-center border-y-0 border-x-0 border-b-2 border-[#242424]/80 relative flex flex-col justify-center items-center">
+                <div class="h-[4px] bg-sky-600 absolute z-10 boxShadow transition-width duration-500 east-in-out"
+                    :class="dynamicBar ? `w-[${barWidth}%]` : 'w-[40%]'"></div>
             </div>
-    
-            <div class="text-center bg-gray-400/40 rounded mx-5 py-3 px-2 border border-gray-400/50 flex flex-col justify-center items-center text-white gap-2">
-                <div
-                    v-for="(item, index) in taskList"
-                    :key="index"
-                    :class="[item.completed ? 'line-through decoration-sky-600 decoration-2' : '']"
-                >
-                    {{ item.text }} <span v-if="item.totalStage != null && item.totalStage != 0">{{ formatStage(item) }}</span>
+
+            <div
+                class="text-center bg-[#242424]/50 rounded mx-5 py-3 px-2 border border-[#242424]/50 flex flex-col justify-center items-center text-neutral-200 gap-2 ">
+                <div v-for="(item, index) in taskList" :key="index"
+                    :class="[item.completed ? 'line-through decoration-netural-200 decoration-1' : '']">
+                    <span v-if="item.icon" class="mr-2">
+                        <i :class="item.icon"></i>
+                    </span>
+                    {{ item.text }} <span v-if="item.totalStage != null && item.totalStage != 0">{{ formatStage(item)
+                        }}</span>
                 </div>
             </div>
         </div>
     </div>
-    
-    
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.47/vue.global.prod.min.js"></script>
+
+
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.47/vue.global.prod.min.js"></script>
     <script src="index.js"></script>
 </body>
+
 </html>
